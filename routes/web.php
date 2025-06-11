@@ -10,7 +10,7 @@ Route::get('/', function () {
     return redirect(route('login'));
 });
 
-Route::view('/',('welcome'))->name('dashboard');
+Route::view('/', 'dashboard')->name('dashboard');
 
 Route::get('login',[AuthController::class,'login'])->name('login');
 
@@ -24,7 +24,7 @@ Route::get('/verify/{code}', [AuthController::class,'verify'])->name('verify_lin
 Route::get('logout', function (){
     Auth::logout();
     return redirect(route('login'));
-});
+})->name('logout');
 
 // Password Reset Routes
 Route::get('password/reset', [AuthController::class, 'showLinkRequestForm'])->name('password.request');
