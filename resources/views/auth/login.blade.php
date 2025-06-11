@@ -37,6 +37,10 @@
                             </div>
                             <button type="submit" class="btn btn-primary">Login</button>
 
+                            <div class="mt-2">
+                                <a href="{{ route('password.request') }}">Forgot your password?</a>
+                            </div>
+
                             <a href="{{ route('register') }}">not having account?register here</a>
 
                         </form>
