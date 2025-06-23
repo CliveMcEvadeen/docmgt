@@ -20,3 +20,10 @@
 - **Password:** Officer123!
 
 > These accounts are created by the seeders in `database/seeders/`. You can log in with these credentials after running the database seed command.
+
+
+![alt text](image.png)
+
+![alt text](image-1.png)
+
+![alt text](image-2.png)

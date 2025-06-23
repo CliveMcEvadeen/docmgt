@@ -13,11 +13,10 @@ class AdminController extends Controller
     public function dashboard()
     {
         $officers = User::where('role', 'officer')->get();
-        $locations = Location::all();
         $assignments = OfficerAssignment::with(['officer', 'location'])->get();
         $documents = \App\Models\Document::all();
-
-        return view('dashboards.admin', compact('officers', 'locations', 'assignments', 'documents'));
+        $reports = \App\Models\DailyReport::all();
+        return view('admin.dashboard', compact('officers', 'assignments', 'documents', 'reports'));
     }
 
     // Assign officer to location
@@ -106,6 +105,7 @@ class AdminController extends Controller
         $locations = Location::all();
         $assignments = OfficerAssignment::with(['officer', 'location'])->get();
         $documents = \App\Models\Document::all();
-        return view('admin.dashboard', compact('officers', 'locations', 'assignments', 'documents'));
+        $reports = \App\Models\DailyReport::all();
+        return view('admin.dashboard', compact('officers', 'locations', 'assignments', 'documents', 'reports'));
     }
 }
