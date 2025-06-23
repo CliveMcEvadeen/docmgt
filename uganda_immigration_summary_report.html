@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Daily Movement Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      color: #333;
+    }
+    form {
+      background-color: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 800px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    fieldset {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+    }
+    legend {
+      font-weight: bold;
+    }
+    .inline-inputs {
+      display: flex;
+      gap: 10px;
+    }
+    .inline-inputs > div {
+      flex: 1;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Daily Movement Report</h1>
+  <form>
+    <label for="officer">Officer Name</label>
+    <input type="text" id="officer" name="officer" required />
+
+    <label for="location">Assigned Location</label>
+    <input type="text" id="location" name="location" required />
+
+    <label for="entryType">Entry Type</label>
+    <select id="entryType" name="entryType" required>
+      <option value="">-- Select --</option>
+      <option value="arrival">Arrival</option>
+      <option value="departure">Departure</option>
+    </select>
+
+    <label for="totalCount">Total Count</label>
+    <input type="number" id="totalCount" name="totalCount" required />
+
+    <fieldset>
+      <legend>Gender Breakdown</legend>
+      <div class="inline-inputs">
+        <div>
+          <label for="maleCount">Male</label>
+          <input type="number" id="maleCount" name="maleCount" />
+        </div>
+        <div>
+          <label for="femaleCount">Female</label>
+          <input type="number" id="femaleCount" name="femaleCount" />
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Category Breakdown (split by gender)</legend>
+      <label>Asylum Seekers</label>
+      <div class="inline-inputs">
+        <div><input type="number" placeholder="Male" name="asylumMale" /></div>
+        <div><input type="number" placeholder="Female" name="asylumFemale" /></div>
+      </div>
+
+      <label>Deportations</label>
+      <div class="inline-inputs">
+        <div><input type="number" placeholder="Male" name="deportMale" /></div>
+        <div><input type="number" placeholder="Female" name="deportFemale" /></div>
+      </div>
+
+      <label>Returnees</label>
+      <div class="inline-inputs">
+        <div><input type="number" placeholder="Male" name="returnMale" /></div>
+        <div><input type="number" placeholder="Female" name="returnFemale" /></div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Nationality Breakdown (per gender)</legend>
+      <p>Enter up to 3 nationalities:</p>
+
+      <label>Nationality 1</label>
+      <div class="inline-inputs">
+        <div><input type="text" placeholder="Country" name="nat1" /></div>
+        <div><input type="number" placeholder="Male" name="nat1Male" /></div>
+        <div><input type="number" placeholder="Female" name="nat1Female" /></div>
+      </div>
+
+      <label>Nationality 2</label>
+      <div class="inline-inputs">
+        <div><input type="text" placeholder="Country" name="nat2" /></div>
+        <div><input type="number" placeholder="Male" name="nat2Male" /></div>
+        <div><input type="number" placeholder="Female" name="nat2Female" /></div>
+      </div>
+
+      <label>Nationality 3</label>
+      <div class="inline-inputs">
+        <div><input type="text" placeholder="Country" name="nat3" /></div>
+        <div><input type="number" placeholder="Male" name="nat3Male" /></div>
+        <div><input type="number" placeholder="Female" name="nat3Female" /></div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Mode of Transport</legend>
+      <label for="mode">Mode</label>
+      <select id="mode" name="mode" required>
+        <option value="">-- Select --</option>
+        <option value="flight">Flight</option>
+        <option value="marine">Marine</option>
+        <option value="land">Land</option>
+      </select>
+
+      <div id="flightFields">
+        <label for="flightNumber">Flight Number</label>
+        <input type="text" id="flightNumber" name="flightNumber" />
+
+        <label for="origin">Origin</label>
+        <input type="text" id="origin" name="origin" />
+
+        <label for="destination">Destination</label>
+        <input type="text" id="destination" name="destination" />
+      </div>
+    </fieldset>
+
+    <button type="submit">Submit Report</button>
+  </form>
+
+  <script>
+    const modeSelect = document.getElementById('mode');
+    const flightFields = document.getElementById('flightFields');
+
+    function toggleFlightFields() {
+      if (modeSelect.value === 'flight') {
+        flightFields.style.display = 'block';
+      } else {
+        flightFields.style.display = 'none';
+      }
+    }
+
+    modeSelect.addEventListener('change', toggleFlightFields);
+    toggleFlightFields(); // initialize on load
+  </script>
+</body>
+</html>

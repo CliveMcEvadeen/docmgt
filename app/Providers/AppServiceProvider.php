@@ -24,5 +24,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         Blade::component('user-layout',UserLayout::class);
+        \Livewire\Livewire::component('admin-officer-management', \App\Http\Livewire\AdminOfficerManagement::class);
+        \Livewire\Livewire::component('location-management', \App\Http\Livewire\LocationManagement::class);
     }
 }

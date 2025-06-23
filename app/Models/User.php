@@ -20,11 +20,13 @@ class User extends Authenticatable
     protected $fillable = [
         'firstname',
         'lastname',
+        'full_name', // add this for modal compatibility
         'password',
         'email',
         'mobile_no',
         'email_code',
-        'email_verified_at'
+        'email_verified_at',
+        'role'
     ];
 
     protected $appends=['full_name'];
@@ -53,6 +55,19 @@ class User extends Authenticatable
     }
 
     protected function getFullNameAttribute(){
-        return $this->firstname." ".$this->lastname;
+        if (!empty($this->attributes['full_name'])) {
+            return $this->attributes['full_name'];
+        }
+        return trim(($this->firstname ?? '') . ' ' . ($this->lastname ?? ''));
+    }
+
+    public function assignedLocations()
+    {
+        return $this->belongsToMany(Location::class, 'officer_assignments', 'officer_id', 'location_id');
+    }
+    
+    public function assignment()
+    {
+        return $this->hasOne(\App\Models\OfficerAssignment::class, 'officer_id');
     }
 }

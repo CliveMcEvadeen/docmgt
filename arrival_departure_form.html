@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Arrival/Departure Entry Form</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; padding: 0; }
+        input, select, textarea { margin: 5px 0; padding: 8px; width: 100%; box-sizing: border-box; }
+        label { font-weight: bold; margin-top: 10px; display: block; }
+        .row { display: flex; gap: 10px; align-items: center; margin-bottom: 5px; }
+        .row input { flex: 1; }
+        .section { margin-top: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+        th { background-color: #f0f0f0; }
+    </style>
+</head>
+<body>
+
+<h2>Arrival/Departure Daily Report</h2>
+
+<form id="entryForm">
+    <label>Date</label>
+    <input type="date" name="entry_date" required>
+
+    <label>Officer Name</label>
+    <input type="text" name="officer_name" value="Prefilled Officer Name" readonly>
+
+    <label>Location</label>
+    <input type="text" name="location" value="Prefilled Location" readonly>
+
+    <label>Entry Type</label>
+    <select name="entry_type" required>
+        <option value="">Select</option>
+        <option value="arrival">Arrival</option>
+        <option value="departure">Departure</option>
+    </select>
+
+    <label>Total People (All Categories)</label>
+    <input type="number" name="total_count" required>
+
+    <div class="section">
+        <h3>Gender Breakdown</h3>
+        <div class="row">
+            <label>Male</label>
+            <input type="number" id="gender_male" oninput="updateGenderTotal()" />
+            <label>Female</label>
+            <input type="number" id="gender_female" oninput="updateGenderTotal()" />
+            <label>Total</label>
+            <input type="number" id="gender_total" readonly />
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>Categories Breakdown</h3>
+        <table>
+            <thead>
+                <tr><th>Category</th><th>Male</th><th>Female</th><th>Total</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Asylum Seekers</td>
+                    <td><input type="number" id="asylum_male" oninput="updateCategoryTotal('asylum')"></td>
+                    <td><input type="number" id="asylum_female" oninput="updateCategoryTotal('asylum')"></td>
+                    <td><input type="number" id="asylum_total" readonly></td>
+                </tr>
+                <tr>
+                    <td>Deportations</td>
+                    <td><input type="number" id="deport_male" oninput="updateCategoryTotal('deport')"></td>
+                    <td><input type="number" id="deport_female" oninput="updateCategoryTotal('deport')"></td>
+                    <td><input type="number" id="deport_total" readonly></td>
+                </tr>
+                <tr>
+                    <td>Returnees</td>
+                    <td><input type="number" id="return_male" oninput="updateCategoryTotal('return')"></td>
+                    <td><input type="number" id="return_female" oninput="updateCategoryTotal('return')"></td>
+                    <td><input type="number" id="return_total" readonly></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h3>Nationalities (Add Rows Manually)</h3>
+        <table id="nationalityTable">
+            <thead>
+                <tr><th>Nationality</th><th>Male</th><th>Female</th><th>Total</th><th>Remove</th></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <button type="button" onclick="addNationalityRow()">Add Nationality</button>
+    </div>
+
+    <div class="section">
+        <h3>Transport Details</h3>
+        <label>Mode of Transport</label>
+        <select name="mode" onchange="toggleTransportDetails(this.value)">
+            <option value="">Select</option>
+            <option value="flight">Flight</option>
+            <option value="land">Land</option>
+            <option value="marine">Marine</option>
+        </select>
+
+        <div id="flightDetails" style="display: none;">
+            <h4>Flight Entries</h4>
+            <table id="flightTable">
+                <thead>
+                    <tr><th>Flight Number</th><th>Origin</th><th>Destination</th><th>Remove</th></tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <button type="button" onclick="addFlightRow()">Add Flight</button>
+        </div>
+    </div>
+
+    <label for="comments">Any Additional Comments</label>
+    <textarea id="comments" name="comments" rows="4" placeholder="Write any observations or notes here..."></textarea>
+
+    <button type="submit">Submit</button>
+</form>
+
+<script>
+function updateGenderTotal() {
+    const male = parseInt(document.getElementById('gender_male').value) || 0;
+    const female = parseInt(document.getElementById('gender_female').value) || 0;
+    document.getElementById('gender_total').value = male + female;
+}
+function updateCategoryTotal(prefix) {
+    const male = parseInt(document.getElementById(prefix + '_male').value) || 0;
+    const female = parseInt(document.getElementById(prefix + '_female').value) || 0;
+    document.getElementById(prefix + '_total').value = male + female;
+}
+function addNationalityRow() {
+    const table = document.getElementById('nationalityTable').getElementsByTagName('tbody')[0];
+    const row = table.insertRow();
+    const nationality = row.insertCell(0);
+    const male = row.insertCell(1);
+    const female = row.insertCell(2);
+    const total = row.insertCell(3);
+    const remove = row.insertCell(4);
+
+    nationality.innerHTML = '<input type="text" name="nationality[]">';
+    male.innerHTML = '<input type="number" oninput="updateRowTotal(this)">';
+    female.innerHTML = '<input type="number" oninput="updateRowTotal(this)">';
+    total.innerHTML = '<input type="number" readonly>';
+    remove.innerHTML = '<button type="button" onclick="this.parentElement.parentElement.remove()">X</button>';
+}
+function updateRowTotal(elem) {
+    const row = elem.parentElement.parentElement;
+    const male = parseInt(row.cells[1].children[0].value) || 0;
+    const female = parseInt(row.cells[2].children[0].value) || 0;
+    row.cells[3].children[0].value = male + female;
+}
+function toggleTransportDetails(value) {
+    document.getElementById('flightDetails').style.display = (value === 'flight') ? 'block' : 'none';
+}
+function addFlightRow() {
+    const table = document.getElementById('flightTable').getElementsByTagName('tbody')[0];
+    const row = table.insertRow();
+    row.innerHTML = `
+        <td><input type="text" name="flight_number[]"></td>
+        <td><input type="text" name="origin[]"></td>
+        <td><input type="text" name="destination[]"></td>
+        <td><button type="button" onclick="this.parentElement.parentElement.remove()">X</button></td>
+    `;
+}
+</script>
+
+</body>
+</html>
